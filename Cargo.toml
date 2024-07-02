@@ -5,12 +5,9 @@ edition = "2021"
 
 [dependencies]
 async-executor = "1.12.0"
-async-gen = "0.2.3"
 async-io = "2.3.3"
-async-std = "1.12.0"
 clap = { version = "4.5.8", features = ["derive"] }
 env_logger = "0.11.3"
-genetlink = { version = "0.2.5", default-features = false, features = ["async-std"] }
 libc = "0.2.155"
 log = "0.4.22"
 netlink-packet-core = "0.7.0"
