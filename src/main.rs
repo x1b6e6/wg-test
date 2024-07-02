@@ -109,7 +109,7 @@ struct Args {
     interface: String,
 }
 
-async fn real_main() {
+fn main() {
     env_logger::init();
 
     let Args { interface } = clap::Parser::parse();
@@ -200,10 +200,4 @@ async fn real_main() {
             }
         }
     }
-}
-
-fn main() {
-    let ex = async_executor::LocalExecutor::new();
-    let task = ex.spawn(real_main());
-    async_io::block_on(ex.run(task));
 }
