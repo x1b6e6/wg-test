@@ -9,9 +9,6 @@ use netlink_packet_generic::{
 use netlink_packet_wireguard::{nlas::WgDeviceAttrs, Wireguard, WireguardCmd};
 use netlink_sys::{protocols::NETLINK_GENERIC, Socket, SocketAddr};
 
-#[derive(clap::Parser)]
-struct Args {}
-
 fn socket_send<Message>(
     socket: &mut Socket,
     packet: &NetlinkMessage<Message>,
@@ -76,12 +73,15 @@ where
     }
 }
 
+#[derive(clap::Parser)]
+struct Args {
+    interface: String,
+}
+
 async fn real_main() {
     env_logger::init();
 
-    let Args { .. } = clap::Parser::parse();
-
-    let iface = "wg0";
+    let Args { interface } = clap::Parser::parse();
 
     let mut generic = Socket::new(NETLINK_GENERIC).unwrap();
 
@@ -116,7 +116,7 @@ async fn real_main() {
 
     let mut message = NetlinkMessage::from(GenlMessage::from_payload(Wireguard {
         cmd: WireguardCmd::GetDevice,
-        nlas: vec![WgDeviceAttrs::IfName(iface.to_owned())],
+        nlas: vec![WgDeviceAttrs::IfName(interface.clone())],
     }));
     message.header.flags = (NLM_F_REQUEST | NLM_F_ACK | NLM_F_DUMP) as _;
     let NetlinkPayload::InnerMessage(ref mut payload) = message.payload else {
