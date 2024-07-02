@@ -129,9 +129,7 @@ async fn real_main() {
 
     let messages = socket_recv::<GenlMessage<Wireguard>>(&mut generic).unwrap();
 
-    for msg in &messages {
-        log::info!("{msg:?}");
-    }
+    log::info!("{messages:?}");
 }
 
 fn main() {
