@@ -96,7 +96,6 @@ async fn real_main() {
         )],
     }));
     message.header.flags = (NLM_F_REQUEST | NLM_F_ACK) as _;
-    message.header.sequence_number = 1;
     message.finalize();
 
     socket_send(&mut generic, &message).unwrap();
