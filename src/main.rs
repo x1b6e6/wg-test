@@ -21,8 +21,6 @@ fn socket_send<Message>(
 where
     Message: NetlinkSerializable + std::fmt::Debug,
 {
-    let packet = &packet;
-
     log::debug!("<- {packet:?}");
 
     let mut buf = vec![0u8; packet.header.length as usize].into_boxed_slice();
