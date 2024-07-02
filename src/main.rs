@@ -56,7 +56,7 @@ where
                     messages.push(message.clone());
                 }
                 NetlinkPayload::Error(err) => {
-                    return match &err.code {
+                    return match err.code {
                         Some(_) => Err(err.into()),
                         None => Ok(messages),
                     };
