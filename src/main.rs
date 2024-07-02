@@ -102,16 +102,14 @@ async fn real_main() {
 
     let messages = socket_recv::<GenlMessage<GenlCtrl>>(&mut generic).unwrap();
 
-    let mut family_id = None;
+    let family_id = messages
+        .into_iter()
+        .flat_map(|msg| msg.payload.nlas.into_iter())
+        .find_map(|attr| match attr {
+            GenlCtrlAttrs::FamilyId(id) => Some(id),
+            _ => None,
+        });
 
-    'fid_resolver: for msg in messages.into_iter() {
-        for attr in msg.payload.nlas.into_iter() {
-            if let GenlCtrlAttrs::FamilyId(id) = attr {
-                family_id = Some(id);
-                break 'fid_resolver;
-            }
-        }
-    }
     let family_id = family_id.unwrap();
 
     let mut message = NetlinkMessage::from(GenlMessage::from_payload(Wireguard {
